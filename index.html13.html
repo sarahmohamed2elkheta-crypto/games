@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مغامرة الطالب - ترم تاني</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .story-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .emoji-big {
+            font-size: 60px;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .story-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .choice-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: right;
+        }
+
+        .choice-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .choice-btn .choice-letter {
+            background: rgba(255,255,255,0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .question-section {
+            padding: 30px;
+            background: #fff3cd;
+            border-top: 3px solid #ffc107;
+        }
+
+        .subject-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .tag-science { background: #d4edda; color: #155724; }
+        .tag-social { background: #cce5ff; color: #004085; }
+        .tag-math { background: #f8d7da; color: #721c24; }
+        .tag-english { background: #e2d4f0; color: #4a148c; }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #856404;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-btn {
+            background: white;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: right;
+        }
+
+        .answer-btn:hover {
+            background: #ffc107;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .answer-btn.correct {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .answer-btn.wrong {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .result-section {
+            padding: 40px 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .result-section.fail {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        .result-emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: celebrate 1s ease;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+
+        .result-title {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .result-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 900;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .restart-btn {
+            background: white;
+            color: #333;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: #e9ecef;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎮 مغامرة الطالب</h1>
+            <div class="subtitle">الفصل الأول: المتحف السري 📚</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 33%"></div>
+        </div>
+
+        <!-- Scene 1: The Museum -->
+        <div id="scene1" class="story-section">
+            <div class="emoji-big">🏛️📚</div>
+            <div class="story-text">
+                دخلت <strong>متحف المدرسة</strong> عشان تذاكر...<br><br>
+                فجأة الباب اتقفل وراك! 🔒<br><br>
+                المكان مظلم بس فيه <strong>3 غرف</strong> مضيئة...<br><br>
+                كل غرفة فيها <strong>سؤال من منهجك!</strong><br><br>
+                لازم تجاوب صح عشان تخرج!<br><br>
+                <strong>إيه الغرفة اللي هتدخلها؟</strong>
+            </div>
+            <div class="choices">
+                <button class="choice-btn" onclick="goToScene('scene2a')">
+                    <span class="choice-letter">أ</span>
+                    <span>🧪 غرفة العلوم (الأحياء)</span>
+                </button>
+                <button class="choice-btn" onclick="goToScene('scene2b')">
+                    <span class="choice-letter">ب</span>
+                    <span>🌍 غرفة الدراسات (الجغرافيا)</span>
+                </button>
+                <button class="choice-btn" onclick="goToScene('scene2c')">
+                    <span class="choice-letter">ج</span>
+                    <span>🔢 غرفة الرياضيات</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Scene 2A: Science Room (Biology) -->
+        <div id="scene2a" class="story-section hidden">
+            <div class="emoji-big">🧪🌿</div>
+            <div class="story-text">
+                دخلت <strong>غرفة العلوم</strong>...<br><br>
+                فيه مجهر ضخم ونباتات غريبة!<br><br>
+                فجأة ظهر <strong>كتاب الأحياء</strong> وبيتكلم! 📖<br><br>
+                <em>"لو عايز تخرج، جاوب على سؤال من درس النبات!"</em>
+            </div>
+            <div class="question-section">
+                <span class="subject-tag tag-science">🧪 علوم - الأحياء</span>
+                <div class="question-text">❓ إيه وظيفة الجذور في النبات؟ 🌱</div>
+                <div class="answer-options">
+                    <button class="answer-btn" onclick="checkAnswer(this, false, 'scene2a')">أ - صنع الغذاء فقط</button>
+                    <button class="answer-btn" onclick="checkAnswer(this, true, 'scene2a')">ب - امتصاص الماء والأملاح من التربة</button>
+                    <button class="answer-btn" onclick="checkAnswer(this, false, 'scene2a')">ج - التكاثر فقط</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 2B: Social Studies Room (Geography) -->
+        <div id="scene2b" class="story-section hidden">
+            <div class="emoji-big">🌍🗺️</div>
+            <div class="story-text">
+                دخلت <strong>غرفة الدراسات</strong>...<br><br>
+                فيه خريطة العالم ضخمة على الحيطة!<br><br>
+                فجأة ظهر <strong>كتاب الجغرافيا</strong> وبيتكلم! 📖<br><br>
+                <em>"لو عايز تخرج، جاوب على سؤال من درس الموارد!"</em>
+            </div>
+            <div class="question-section">
+                <span class="subject-tag tag-social">🌍 دراسات - جغرافيا</span>
+                <div class="question-text">❓ إيه أكتر موارد مصر طبيعية استخداماً؟ ⛽</div>
+                <div class="answer-options">
+                    <button class="answer-btn" onclick="checkAnswer(this, false, 'scene2b')">أ - الفحم</button>
+                    <button class="answer-btn" onclick="checkAnswer(this, true, 'scene2b')">ب - البترول والغاز الطبيعي</button>
+                    <button class="answer-btn" onclick="checkAnswer(this, false, 'scene2b')">ج - الحديد</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 2C: Math Room -->
+        <div id="scene2c" class="story-section hidden">
+            <div class="emoji-big">🔢📐</div>
+            <div class="story-text">
+                دخلت <strong>غرفة الرياضيات</strong>...<br><br>
+                فيه أرقام بتطير في الهوا! ✨<br><br>
+                فجأة ظهر <strong>كتاب الرياضيات</strong> وبيتكلم! 📖<br><br>
+                <em>"لو عايز تخرج، حل المسألة دي!"</em>
+            </div>
+            <div class="question-section">
+                <span class="subject-tag tag-math">🔢 رياضيات</span>
+                <div class="question-text">❓ لو عندك 120 جنيه واشتريت 8 كتب بـ 12 جنيه للكتاب... كم باقي معاك؟ 💰</div>
+                <div class="answer-options">
+                    <button class="answer-btn" onclick="checkAnswer(this, false, 'scene2c')">أ - 12 جنيه</button>
+                    <button class="answer-btn" onclick="checkAnswer(this, true, 'scene2c')">ب - 24 جنيه</button>
+                    <button class="answer-btn" onclick="checkAnswer(this, false, 'scene2c')">ج - 36 جنيه</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Result -->
+        <div id="result-success" class="result-section hidden">
+            <div class="result-emoji">🎉🏆</div>
+            <div class="result-title">النهاية السعيدة!</div>
+            <div class="result-text">
+                نجحت في مغامرتك! 🎉<br>
+                جاوبت صح و<strong>الباب اتفتح!</strong> 🚪✨<br><br>
+                خرجت من المتحف واكتشفت إنك <strong>ذاكر كويس!</strong> 📚💪<br><br>
+                جاوبت على السؤال صح!<br>
+                إنت فعلاً <strong>بطل المنهج!</strong>
+            </div>
+            <div class="badge">🏅 متفوق المنهج</div><br>
+            <button class="restart-btn" onclick="restartGame()">🔄 العب تاني</button>
+        </div>
+
+        <!-- Fail Result -->
+        <div id="result-fail" class="result-section fail hidden">
+            <div class="result-emoji">📖💪</div>
+            <div class="result-title">لازم تذاكر أكتر!</div>
+            <div class="result-text">
+                الإجابة غلط! 😊<br>
+                بس <strong>مش مشكلة!</strong> ده معناه إنك لسه محتاج تذاكر شوية! 📚<br><br>
+                راجع الدرس و<strong>جرب تاني!</strong><br><br>
+                كل محاولة بتعلمك حاجة جديدة! 💪
+            </div>
+            <div class="badge">📚 بطل المراجعة</div><br>
+            <button class="restart-btn" onclick="restartGame()">🔄 جرب تاني</button>
+        </div>
+    </div>
+
+    <script>
+        function goToScene(sceneId) {
+            document.querySelectorAll('.story-section').forEach(scene => {
+                scene.classList.add('hidden');
+            });
+            document.getElementById(sceneId).classList.remove('hidden');
+            document.getElementById('progress').style.width = '66%';
+            document.querySelector('.game-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function checkAnswer(btn, isCorrect, sceneId) {
+            const buttons = btn.parentElement.querySelectorAll('.answer-btn');
+            buttons.forEach(button => {
+                button.disabled = true;
+                button.style.cursor = 'default';
+            });
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                setTimeout(() => {
+                    showResult(true);
+                }, 1500);
+            } else {
+                btn.classList.add('wrong');
+                buttons.forEach(button => {
+                    if (button.onclick.toString().includes('true')) {
+                        button.classList.add('correct');
+                    }
+                });
+                setTimeout(() => {
+                    showResult(false);
+                }, 2000);
+            }
+        }
+
+        function showResult(isSuccess) {
+            document.querySelectorAll('.story-section').forEach(scene => {
+                scene.classList.add('hidden');
+            });
+
+            if (isSuccess) {
+                document.getElementById('result-success').classList.remove('hidden');
+                createConfetti();
+            } else {
+                document.getElementById('result-fail').classList.remove('hidden');
+            }
+
+            document.getElementById('progress').style.width = '100%';
+        }
+
+        function restartGame() {
+            document.querySelectorAll('.story-section, .result-section').forEach(el => {
+                el.classList.add('hidden');
+            });
+            document.getElementById('scene1').classList.remove('hidden');
+            document.getElementById('progress').style.width = '33%';
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'wrong');
+                btn.style.cursor = 'pointer';
+            });
+            const confetti = document.querySelector('.confetti');
+            if (confetti) confetti.remove();
+        }
+
+        function createConfetti() {
+            const colors = ['#f093fb', '#f5576c', '#667eea', '#764ba2', '#11998e', '#38ef7d'];
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti';
+            document.body.appendChild(confettiContainer);
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.borderRadius = '50%';
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                confettiContainer.appendChild(confetti);
+            }
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    </script>
+</body>
+</html>
